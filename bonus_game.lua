@@ -66,6 +66,14 @@ end
 
 local function pick_bonus_symbol()
     local weighted_symbols = build_weighted_symbols()
+    
+    -- Remove Books from Bonus Symbols
+    for i = #weighted_symbols, 1, -1 do
+        if weighted_symbols[i] == "Book" then
+            table.remove(weighted_symbols, i)
+        end
+    end
+
     local reel = { symbols = {}, scroll_offset = 0, scroll_timer = 90, stopped = false }
 
     for i = 1, 20 do

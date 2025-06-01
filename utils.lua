@@ -1,5 +1,10 @@
 local utils = {}
 
+local remaining_bonus_spins = 0
+local current_score = 0
+local total_score = 0
+local bonus_symbol = nil
+
 utils.SCROLL_SPEED = 8
 utils.SYMBOL_SIZE = 30
 utils.REEL_WIDTH = 41
@@ -19,7 +24,16 @@ utils.symbol_values = {
     Scarab={5,30,100,750}, Sungod={5,30,100,750}, Explorer={10,100,1000,5000}, Book={0,20,200,250}
 }
 utils.symbol_chances = { Ten=15, J=15, Q=15, K=12, A=12, Scarab=10, Sungod=8, Explorer=5, Book=3 }
-for s, w in pairs(utils.symbol_chances) do for _=1,w do table.insert(utils.weighted_symbols,s) end end
+
+function utils.create_weighted_symbols()
+    utils.weighted_symbols = {}
+    for s, w in pairs(utils.symbol_chances) do 
+        for _=1,w do 
+            table.insert(utils.weighted_symbols,s) 
+        end 
+    end
+end
+utils.create_weighted_symbols()
 
 utils.current_score = 0
 utils.total_score = 0
@@ -37,7 +51,7 @@ function utils.load_assets()
     utils.hit_images = {}
     utils.symbol_images = {}
     for _, name in ipairs(utils.symbol_names) do
-        utils.symbol_images[name] = Image.load("assets/symbols/"..name..".png", VRAM)
+        utils.symbol_images[name] = Image.load("assets/symbols/"..name..".png", RAM)
     end
     for i=1,10 do
         utils.hit_images[i] = Image.load("assets/symbols/crosses/"..i..".png", RAM)
@@ -84,6 +98,7 @@ function utils.handle_input()
 end
 
 function utils.draw_game_ui()
+
     -- Upper screen
     screen.blit(SCREEN_UP, 0, 0, utils.background_img)
 
@@ -100,7 +115,12 @@ function utils.draw_game_ui()
     screen.print(SCREEN_DOWN, 170, 125, "" .. average_score, text_color)
 
     -- === Bonus Symbol (in this case just an X) ===
-    screen.blit(SCREEN_DOWN, 170, 140, utils.hit_images[6])
+    if utils.bonus_symbol ~= nil then
+        screen.blit(SCREEN_DOWN, 170, 140, utils.symbol_images[utils.bonus_symbol])
+    else
+        screen.blit(SCREEN_DOWN, 170, 140, utils.hit_images[6])
+    end
+
 
     -- === Controls ===
     screen.drawFillRect(SCREEN_DOWN, 0, 180, 256, 192, Color.new256(0, 0, 0))
@@ -121,6 +141,51 @@ function utils.display_reels()
         end
     end
     render()
+end
+
+function utils.roll_reels()
+    utils.spins_done = utils.spins_done + 1
+
+    utils.reels = {}
+
+    for i = 1, 5 do
+        utils.reels[i] = { symbols = {}, scroll_offset = 0, scroll_timer = 50 + i * 20, stopped = false }
+        for _ = 1, 20 do
+            table.insert(utils.reels[i].symbols, utils.weighted_symbols[math.random(#utils.weighted_symbols)])
+        end
+    end
+
+    local spinning = true
+
+    Sound.startSFX(3)
+    while spinning do
+        utils.draw_game_ui()
+
+        for i = 1, 5 do
+            local reel = utils.reels[i]
+            local x = utils.screen_offset_x + (i - 1) * utils.REEL_WIDTH + 2
+
+            if not reel.stopped then
+                reel.scroll_offset = reel.scroll_offset + utils.SCROLL_SPEED
+                if reel.scroll_offset >= utils.SYMBOL_SIZE + 10 then
+                    reel.scroll_offset = 0
+                    table.insert(reel.symbols, 1, table.remove(reel.symbols))
+                end
+                reel.scroll_timer = reel.scroll_timer - 1
+                if reel.scroll_timer <= 0 then reel.stopped = true end
+            end
+
+            for row = 0, 2 do
+                local sym = reel.symbols[row + 1]
+                local y = utils.screen_offset_y + row * utils.SYMBOL_SIZE - reel.scroll_offset + 40 + 10 * row
+                if y >= 30 then screen.blit(SCREEN_UP, x, y, utils.symbol_images[sym]) end
+            end
+        end
+
+        render()
+        spinning = false
+        for i = 1, 5 do if not utils.reels[i].stopped then spinning = true break end end
+    end
 end
 
 function utils.render_winning_lines()

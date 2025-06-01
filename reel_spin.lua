@@ -47,52 +47,6 @@ local function cleanup()
 end
 
 
-local function roll_reels()
-    utils.spins_done = utils.spins_done + 1
-
-    utils.reels = {}
-
-    for i = 1, 5 do
-        utils.reels[i] = { symbols = {}, scroll_offset = 0, scroll_timer = 50 + i * 20, stopped = false }
-        for _ = 1, 20 do
-            table.insert(utils.reels[i].symbols, utils.weighted_symbols[math.random(#utils.weighted_symbols)])
-        end
-    end
-
-    local spinning = true
-
-    Sound.startSFX(3)
-    while spinning do
-        utils.draw_game_ui()
-
-        for i = 1, 5 do
-            local reel = utils.reels[i]
-            local x = utils.screen_offset_x + (i - 1) * utils.REEL_WIDTH + 2
-
-            if not reel.stopped then
-                reel.scroll_offset = reel.scroll_offset + utils.SCROLL_SPEED
-                if reel.scroll_offset >= utils.SYMBOL_SIZE + 10 then
-                    reel.scroll_offset = 0
-                    table.insert(reel.symbols, 1, table.remove(reel.symbols))
-                end
-                reel.scroll_timer = reel.scroll_timer - 1
-                if reel.scroll_timer <= 0 then reel.stopped = true end
-            end
-
-            for row = 0, 2 do
-                local sym = reel.symbols[row + 1]
-                local y = utils.screen_offset_y + row * utils.SYMBOL_SIZE - reel.scroll_offset + 40 + 10 * row
-                if y >= 30 then screen.blit(SCREEN_UP, x, y, utils.symbol_images[sym]) end
-            end
-        end
-
-        render()
-        spinning = false
-        for i = 1, 5 do if not utils.reels[i].stopped then spinning = true break end end
-    end
-end
-
-
 local function run_game()
     math.randomseed(os.time()) for _ = 1, 5 do math.random() end
     utils.load_assets()
@@ -120,7 +74,7 @@ local function run_game()
         end
 
         utils.current_score = 0
-        roll_reels()
+        utils.roll_reels()
         utils.evaluate_reels()
         utils.total_score = utils.total_score + utils.current_score
         if utils.winning_lines ~= nil and #utils.winning_lines > 0 then
@@ -128,7 +82,8 @@ local function run_game()
         end
 
         if utils.evaluate_bonus() then
-            utils.total_score = utils.total_score + start_bonus_rounds()
+            start_bonus_rounds()
+            utils.bonus_symbol = nil
             utils.draw_game_ui()
             render()
         end

@@ -21,7 +21,7 @@ local function pick_bonus_symbol()
 
     while true do
         Controls.read()
-        utils.draw_game_ui(true)
+        utils.draw_game_ui()
         screen.print(SCREEN_UP, 45, 20, "Selecting Bonus Symbol...", Color.new256(255, 215, 0))
 
         if not reel.stopped then
@@ -50,7 +50,7 @@ local function pick_bonus_symbol()
             -- Pause and show the chosen symbol
             for frame = 1, 60 do
                 Controls.read()
-                utils.draw_game_ui(true)
+                utils.draw_game_ui()
                 screen.print(SCREEN_UP, 50, 20, "Chosen Bonus Symbol:", Color.new256(255, 255, 0))
                 screen.blit(SCREEN_UP, 100, 60, utils.symbol_images[utils.bonus_symbol])
                 render()

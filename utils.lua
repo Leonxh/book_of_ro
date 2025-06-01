@@ -1,5 +1,6 @@
 local utils = {}
 
+local bonus_active = false
 local remaining_bonus_spins = 0
 local current_score = 0
 local total_score = 0
@@ -46,6 +47,7 @@ utils.spins_done = 0
 function utils.load_assets()
     -- LOAD ASSETS
     utils.background_img = Image.load("assets/sprites/Background.png", VRAM)
+    utils.background_img_bonus = Image.load("assets/sprites/Background_bonus.png", VRAM)
     utils.background_img_lower = Image.load("assets/sprites/Background_lower.png", VRAM)
 
     utils.hit_images = {}
@@ -100,8 +102,12 @@ end
 function utils.draw_game_ui()
 
     -- Upper screen
-    screen.blit(SCREEN_UP, 0, 0, utils.background_img)
-
+    if utils.bonus_active then
+        screen.blit(SCREEN_UP, 0, 0, utils.background_img_bonus)
+    else
+        screen.blit(SCREEN_UP, 0, 0, utils.background_img)
+    end
+    
     -- Lower Background
     screen.blit(SCREEN_DOWN, 0, 0, utils.background_img_lower)
 
@@ -115,9 +121,11 @@ function utils.draw_game_ui()
     screen.print(SCREEN_DOWN, 170, 125, "" .. average_score, text_color)
 
     -- === Bonus Symbol (in this case just an X) ===
-    if utils.bonus_symbol ~= nil then
+    if utils.bonus_active and utils.bonus_symbol ~= nil then
+        screen.print(SCREEN_DOWN, 80, 48, "BONUS SPINS: " .. utils.remaining_bonus_spins, text_color)
         screen.blit(SCREEN_DOWN, 170, 140, utils.symbol_images[utils.bonus_symbol])
     else
+        -- Draw Placeholder symbol
         screen.blit(SCREEN_DOWN, 170, 140, utils.hit_images[6])
     end
 

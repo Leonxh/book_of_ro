@@ -5,7 +5,7 @@ local utils = dofile("utils.lua")
 
 local function init_reels()
     utils.reels = {}
-
+    utils.create_weighted_symbols()
     for i = 1, 5 do
         utils.reels[i] = { symbols = {}, scroll_offset = 0, scroll_timer = 50 + i * 20, stopped = false }
         for _ = 1, 20 do
@@ -44,6 +44,7 @@ local function cleanup()
     utils.current_score = 0
     utils.total_score = 0
     utils.spins_done = 0
+    utils.bonus_active = false
 end
 
 
@@ -82,8 +83,9 @@ local function run_game()
         end
 
         if utils.evaluate_bonus() then
+            utils.bonus_active = true
             start_bonus_rounds()
-            utils.bonus_symbol = nil
+            utils.bonus_active = false
             utils.draw_game_ui()
             render()
         end

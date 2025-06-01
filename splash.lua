@@ -20,7 +20,7 @@ local function start_splash()
             Image.destroy(splash)
             if selected == 1 then 
                 Sound.stopAllSFX()
-                start_books()
+                run_game()
             end
             splash = Image.load("assets/sprites/Cover.png", VRAM)
         elseif Keys.newPress.Start then

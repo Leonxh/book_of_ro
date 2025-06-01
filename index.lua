@@ -2,15 +2,15 @@
 
 -- Load all modules
 local splash = dofile("splash.lua")
-local start_reel_spin = require("reel_spin")
+local game = require("reel_spin")
 Sound.loadBank("assets/sound/soundbank.bin")
 for i = 0, 4 do
     Sound.loadSFX(i)
 end
 
 -- Stub implementations of module handlers
-function start_books()
-    start_reel_spin()
+function run_game()
+    game()
     return
 end
 

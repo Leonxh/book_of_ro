@@ -1,0 +1,8 @@
+#define SFX_HIT_1_EDITED	0
+#define SFX_HIT_2_EDITED	1
+#define SFX_HIT_3_EDITED	2
+#define SFX_SPIN_EDITED	3
+#define SFX_STARTUP_EDITED	4
+#define MSL_NSONGS	0
+#define MSL_NSAMPS	5
+#define MSL_BANKSIZE	5

@@ -6,7 +6,7 @@ local screen_offset_x, screen_offset_y, DISPLAY_TIME = 28, 10, 55
 
 -- Assets and State
 local background_img = Image.load("assets/sprites/Background.png", VRAM)
-local background_img_lower = Image.load("assets/sprites/Cover.png", VRAM)
+local background_img_lower = Image.load("assets/sprites/Background_lower.png", VRAM)
 local symbol_images, hit_images, reels = {}, {}, {}
 local symbol_names = { "A", "K", "Q", "J", "Ten", "Scarab", "Sungod", "Explorer", "Book" }
 local paylines = {
@@ -27,6 +27,7 @@ local current_score, bonus_games, total_score = 0, false, 0
 local winning_lines, winning_line_sounded, current_line_index, line_display_timer = {}, 0, 0, 0
 local spinning, auto_spin = false, false
 local quitting = false
+local spins_done = 0
 
 
 -- Initialization
@@ -65,18 +66,27 @@ end
 
 
 local function draw_game_ui()
-    -- Draw background on upper screen
+    -- Upper screen
     screen.blit(SCREEN_UP, 0, 0, background_img)
 
-    -- Clear lower screen area
+    -- Lower Background
     screen.blit(SCREEN_DOWN, 0, 0, background_img_lower)
 
-    -- Game stats
-    screen.print(SCREEN_DOWN, 10, 100, "This Spin: " .. current_score, Color.new256(255, 215, 0))
-    screen.print(SCREEN_DOWN, 10, 120, "Total Score: " .. total_score, Color.new256(200, 200, 255))
+    -- === Game Stats ===
+    local text_color = current_score, Color.new256(0, 0, 0)
+    screen.print(SCREEN_DOWN, 170, 65, "" .. current_score, text_color)
+    screen.print(SCREEN_DOWN, 170, 85, "" .. total_score, text_color)
+    screen.print(SCREEN_DOWN, 170, 105, "" .. spins_done, text_color)
 
-    -- Control hints
-    screen.print(SCREEN_DOWN, 10, 180, "A: Spin | B: Auto | START: Quit", Color.new256(200, 200, 200))
+    local average_score = spins_done > 0 and math.floor(total_score / spins_done) or 0
+    screen.print(SCREEN_DOWN, 170, 125, "" .. average_score, text_color)
+
+    -- === Bonus Symbol (in this case just an X) ===
+    screen.blit(SCREEN_DOWN, 170, 140, hit_images[6])
+
+    -- === Controls ===
+    screen.drawFillRect(SCREEN_DOWN, 0, 180, 256, 192, Color.new256(0, 0, 0))
+    screen.print(SCREEN_DOWN, 40, 182, "A: Spin | B: Auto | START: Quit", Color.new256(200, 200, 200))
 
     -- We also need to check user input here (yes, it's kinda ugly)
     handle_input()
@@ -194,6 +204,8 @@ end
 
 
 local function roll_reels()
+    spins_done = spins_done + 1
+
     reels = {}
 
     for i = 1, 5 do
@@ -246,6 +258,9 @@ local function run_game()
 
     while true do
         Controls.read()
+        -- Calling this twice is really shitty but i'm having trouble with only one screen refreshing on calling render()
+        -- This is a workaround for that issue. The "bug" is only noticeable on initial load of the game
+        display_reels()
         display_reels()
 
         

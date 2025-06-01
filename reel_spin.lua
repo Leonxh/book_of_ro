@@ -5,8 +5,8 @@ local SCROLL_SPEED, SYMBOL_SIZE, REEL_WIDTH = 8, 30, 41
 local screen_offset_x, screen_offset_y, DISPLAY_TIME = 28, 10, 55
 
 -- Assets and State
-local background_img = Image.load("assets/sprites/Background.png", VRAM)
-local background_img_lower = Image.load("assets/sprites/Background_lower.png", VRAM)
+local background_img = nil -- Image.load("assets/sprites/Background.png", VRAM)
+local background_img_lower = nil -- Image.load("assets/sprites/Background_lower.png", VRAM)
 local symbol_images, hit_images, reels = {}, {}, {}
 local symbol_names = { "A", "K", "Q", "J", "Ten", "Scarab", "Sungod", "Explorer", "Book" }
 local paylines = {
@@ -32,6 +32,10 @@ local spins_done = 0
 
 -- Initialization
 local function load_assets()
+    background_img = Image.load("assets/sprites/Background.png", VRAM)
+    background_img_lower = Image.load("assets/sprites/Background_lower.png", VRAM)
+
+
     for _, name in ipairs(symbol_names) do
         symbol_images[name] = Image.load("assets/symbols/"..name..".png", VRAM)
     end
@@ -73,7 +77,7 @@ local function draw_game_ui()
     screen.blit(SCREEN_DOWN, 0, 0, background_img_lower)
 
     -- === Game Stats ===
-    local text_color = current_score, Color.new256(0, 0, 0)
+    local text_color = Color.new256(0, 0, 0)
     screen.print(SCREEN_DOWN, 170, 65, "" .. current_score, text_color)
     screen.print(SCREEN_DOWN, 170, 85, "" .. total_score, text_color)
     screen.print(SCREEN_DOWN, 170, 105, "" .. spins_done, text_color)
@@ -106,13 +110,12 @@ local function display_reels()
     render()
 end
 
-local function render_winning_lines(reels, winning_lines, duration_per_line)
-    local duration = duration_per_line or 55
+local function render_winning_lines(reels)
 
     for index, line in ipairs(winning_lines) do
         local line_sound_played = false
 
-        for frame = 1, duration do
+        for frame = 1, DISPLAY_TIME do
             draw_game_ui()
 
             -- Draw all symbols
@@ -152,7 +155,7 @@ end
 
 
 -- Animation for Scenechange
-local function play_bonus_animation()
+local function start_bonus_rounds()
     for frame = 0, 89 do
         Controls.read()
         screen.drawFillRect(SCREEN_UP, 0, 0, 256, 192, Color.new256(0, 0, 0))
@@ -200,6 +203,14 @@ local function cleanup()
     Image.destroy(background_img)
     Image.destroy(background_img_lower)
     collectgarbage("collect")
+    
+    -- Reset some variables to later start with a clean game
+    quitting = false
+    auto_spin = false
+    current_score = 0
+    total_score = 0
+    spins_done = 0
+    bonus_games = false
 end
 
 
@@ -281,11 +292,11 @@ local function run_game()
         current_score, winning_lines = evaluate_reels(reels)
         total_score = total_score + current_score
         if winning_lines ~= nil and #winning_lines > 0 then
-            render_winning_lines(reels, winning_lines, 55)
+            render_winning_lines(reels)
         end
 
         if evaluate_bonus() then
-            total_score = total_score + play_bonus_animation()
+            total_score = total_score + start_bonus_rounds()
             draw_game_ui()
             render()
         end

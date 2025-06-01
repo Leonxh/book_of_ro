@@ -1,3 +1,4 @@
+local utils = {}
 local remaining_bonus_spins = 0
 local current_score = 0
 local total_score = 0
@@ -296,7 +297,8 @@ local function render_winning_lines(reels, winning_lines, duration_per_line)
     end
 end
 
-local function run_bonus_game()
+local function run_bonus_game(new_utils)
+    utils = new_utils
     remaining_bonus_spins = 10
     total_score = 0
     current_score = 0

@@ -21,6 +21,7 @@ local function start_splash()
             if selected == 1 then 
                 Sound.stopAllSFX()
                 run_game()
+                Sound.startSFX(4)
             end
             splash = Image.load("assets/sprites/Cover.png", VRAM)
         elseif Keys.newPress.Start then

@@ -26,6 +26,7 @@ for s, w in pairs(symbol_chances) do for _=1,w do table.insert(weighted_symbols,
 local current_score, bonus_games, total_score = 0, false, 0
 local winning_lines, winning_line_sounded, current_line_index, line_display_timer = {}, 0, 0, 0
 local spinning, auto_spin = false, false
+local quitting = false
 
 
 -- Initialization
@@ -56,6 +57,12 @@ local function evaluate_bonus()
     return books >= 3
 end
 
+local function handle_input()
+    Controls.read()
+    if Keys.newPress.Start then quitting = true end
+    if Keys.newPress.B then auto_spin = not auto_spin end
+end
+
 
 local function draw_game_ui()
     -- Draw background on upper screen
@@ -70,6 +77,9 @@ local function draw_game_ui()
 
     -- Control hints
     screen.print(SCREEN_DOWN, 10, 180, "A: Spin | B: Auto | START: Quit", Color.new256(200, 200, 200))
+
+    -- We also need to check user input here (yes, it's kinda ugly)
+    handle_input()
 end
 
 
@@ -93,7 +103,6 @@ local function render_winning_lines(reels, winning_lines, duration_per_line)
         local line_sound_played = false
 
         for frame = 1, duration do
-            Controls.read()
             draw_game_ui()
 
             -- Draw all symbols
@@ -198,7 +207,6 @@ local function roll_reels()
 
     Sound.startSFX(3)
     while spinning do
-        --Controls.read()
         draw_game_ui()
 
         for i = 1, 5 do
@@ -240,18 +248,19 @@ local function run_game()
         Controls.read()
         display_reels()
 
-        -- This needs to be handled at some differenz place.
-        -- This will not work in the while true loop like i would want it to
-        if Keys.newPress.Start then break end
-        if Keys.newPress.B then auto_spin = not auto_spin end
-
+        
         -- Wait for user input to continue spin
         while true do
-            Controls.read()
-            if auto_spin or Keys.newPress.A then
+            handle_input()
+            if auto_spin or Keys.newPress.A or quitting then
                 break
             end
         end
+
+        if quitting then
+            break
+        end
+
         current_score = 0
         reels = roll_reels()
         current_score, winning_lines = evaluate_reels(reels)

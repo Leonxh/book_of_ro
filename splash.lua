@@ -1,9 +1,10 @@
-local function start_splash()
-    local splash = Image.load("assets/sprites/Cover.png", VRAM)
+local game = require("reel_spin")
 
-    local menu_items = { "Book of Ro" }
-    local selected = 1
-    local total_items = #menu_items
+local function start_splash()
+    -- Always start this sound when entering this screen
+    Sound.startSFX(4)
+
+    local splash = Image.load("assets/sprites/Cover.png", VRAM)
 
     while true do
         Controls.read()
@@ -18,26 +19,23 @@ local function start_splash()
 
         if Keys.newPress.A then
             Image.destroy(splash)
-            if selected == 1 then 
-                Sound.stopAllSFX()
-                run_game()
-                Sound.startSFX(4)
-            end
+
+            Sound.stopAllSFX()
+            game()
+            Sound.startSFX(4)
+
             splash = Image.load("assets/sprites/Cover.png", VRAM)
         elseif Keys.newPress.Start then
             Image.destroy(splash)
-            return 1
+            return 1 -- When quitting, we need to return 1 to actually quit cleanly
         end
 
         screen.blit(SCREEN_UP, 0, 0, splash)
 
-        for i = 1, total_items do
-            local color = (i == selected) and Color.new256(255, 255, 0) or Color.new256(200, 200, 200)
-            screen.print(SCREEN_DOWN, 40, 30 + (i - 1) * 20, (i == selected and "> " or "  ") .. menu_items[i], color)
-        end
+        -- TODO: Instead of this text, add an entire background splash screen for the bottom screen
+        screen.print(SCREEN_DOWN, 110, 80, "Begin", Color.new256(200, 200, 200))
 
-        screen.print(SCREEN_DOWN, 10, 170, "Press A to start", Color.new256(200, 200, 200))
-        screen.print(SCREEN_DOWN, 10, 182, "Press START to quit", Color.new256(200, 200, 200))
+        screen.print(SCREEN_DOWN, 65, 182, "A: Begin | START: Quit", Color.new256(200, 200, 200))
 
         render()
     end

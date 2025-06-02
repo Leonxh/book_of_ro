@@ -17,16 +17,23 @@ end
 
 -- Animation for Scenechange
 local function start_bonus_rounds()
-    for frame = 0, 89 do
-        Controls.read()
-        screen.drawFillRect(SCREEN_UP, 0, 0, 256, 192, Color.new256(0, 0, 0))
-        screen.print(SCREEN_UP, 60, 80, "BONUS GAME!", Color.new256(255, 215, 0))
-        if frame % 10 < 5 then
-            screen.print(SCREEN_UP, 70, 100, "Get ready...", Color.new256(255, 0, 0))
+    for frame = 0, 90 do
+        utils.draw_game_ui()
+        for col = 1, 5 do
+            local x = utils.screen_offset_x + (col - 1) * utils.REEL_WIDTH + 2
+            for row = 0, 2 do
+                local sym = utils.reels[col].symbols[row + 1]
+                local y = utils.screen_offset_y + row * utils.SYMBOL_SIZE + 40 + (10 * row)
+                screen.blit(SCREEN_UP, x, y, utils.symbol_images[sym])
+            end
+        end
+        if frame % 5 ~= 0 then
+            screen.print(SCREEN_DOWN, 95, 45, "!!!BONUS!!!", Color.new256(150, 0, 0))
         end
         render()
     end
-    for _ = 1, 15 do render() end
+
+    utils.bonus_active = true
     return run_bonus_game(utils)
 end
 
@@ -83,7 +90,6 @@ local function run_game()
         end
 
         if utils.evaluate_bonus() then
-            utils.bonus_active = true
             start_bonus_rounds()
             utils.bonus_active = false
             utils.draw_game_ui()

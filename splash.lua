@@ -36,7 +36,7 @@ local function start_splash()
             screen.print(SCREEN_DOWN, 40, 30 + (i - 1) * 20, (i == selected and "> " or "  ") .. menu_items[i], color)
         end
 
-        screen.print(SCREEN_DOWN, 10, 170, "Use UP/DOWN, A to select", Color.new256(200, 200, 200))
+        screen.print(SCREEN_DOWN, 10, 170, "Press A to start", Color.new256(200, 200, 200))
         screen.print(SCREEN_DOWN, 10, 182, "Press START to quit", Color.new256(200, 200, 200))
 
         render()

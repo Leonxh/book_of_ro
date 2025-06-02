@@ -2,6 +2,8 @@ local utils = {}
 
 
 local function pick_bonus_symbol()
+
+    utils.bonus_symbol = nil
     
     -- Remove Books from Bonus Symbols
     for i = #utils.weighted_symbols, 1, -1 do
@@ -17,15 +19,16 @@ local function pick_bonus_symbol()
     end
     utils.create_weighted_symbols()
 
-    local SCROLL_SPEED = 16
+    local function draw_selection_highlight()
+        local center_y = utils.screen_offset_y + utils.SYMBOL_SIZE + 40 + 10 * 1
+        screen.drawFillRect(SCREEN_UP, utils.screen_offset_x + 2 * utils.REEL_WIDTH - 1, center_y - 2, utils.screen_offset_x + 2 * utils.REEL_WIDTH + utils.SYMBOL_SIZE + 5, center_y + utils.SYMBOL_SIZE + 4, Color.new256(20, 20, 20))
+    end
 
     while true do
-        Controls.read()
         utils.draw_game_ui()
-        screen.print(SCREEN_UP, 45, 20, "Selecting Bonus Symbol...", Color.new256(255, 215, 0))
 
         if not reel.stopped then
-            reel.scroll_offset = reel.scroll_offset + utils.SCROLL_SPEED
+            reel.scroll_offset = reel.scroll_offset + utils.SCROLL_SPEED * 2
             if reel.scroll_offset >= utils.SYMBOL_SIZE + 10 then
                 reel.scroll_offset = 0
                 table.insert(reel.symbols, 1, table.remove(reel.symbols))
@@ -34,14 +37,16 @@ local function pick_bonus_symbol()
             if reel.scroll_timer <= 0 then reel.stopped = true end
         end
 
+        draw_selection_highlight()
+
         for row = 0, 2 do
             local sym = reel.symbols[row + 1]
             local y = utils.screen_offset_y + row * utils.SYMBOL_SIZE - reel.scroll_offset + 40 + (10 * row)
-            screen.blit(SCREEN_UP, utils.screen_offset_x + 2 * utils.REEL_WIDTH + 2, y, utils.symbol_images[sym])
+            if y > 40 then
+                screen.blit(SCREEN_UP, utils.screen_offset_x + 2 * utils.REEL_WIDTH + 2, y, utils.symbol_images[sym])
+            end
         end
 
-        local center_y = utils.screen_offset_y + utils.SYMBOL_SIZE + 40 + 10 * 1
-        screen.drawRect(SCREEN_UP, utils.screen_offset_x + 2 * utils.REEL_WIDTH, center_y - 2, utils.screen_offset_x + 2 * utils.REEL_WIDTH + utils.SYMBOL_SIZE + 6, center_y + utils.SYMBOL_SIZE + 4, Color.new256(255, 0, 0))
         render()
 
         if reel.stopped then
@@ -51,8 +56,10 @@ local function pick_bonus_symbol()
             for frame = 1, 60 do
                 Controls.read()
                 utils.draw_game_ui()
-                screen.print(SCREEN_UP, 50, 20, "Chosen Bonus Symbol:", Color.new256(255, 255, 0))
-                screen.blit(SCREEN_UP, 100, 60, utils.symbol_images[utils.bonus_symbol])
+                draw_selection_highlight()
+
+                local center_y = utils.screen_offset_y + utils.SYMBOL_SIZE + 40 + 10 * 1
+                screen.blit(SCREEN_UP, utils.screen_offset_x + 2 * utils.REEL_WIDTH + 2, center_y, utils.symbol_images[utils.bonus_symbol])
                 render()
             end
             return
@@ -164,7 +171,6 @@ local function run_bonus_game(new_utils)
 
         utils.remaining_bonus_spins = utils.remaining_bonus_spins - 1
     end
-    return total_score
 end
 
 

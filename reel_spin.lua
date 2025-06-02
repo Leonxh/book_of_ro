@@ -42,6 +42,7 @@ local function cleanup()
     for _, img in pairs(utils.symbol_images) do if img then Image.destroy(img) end end
     for _, img in pairs(utils.hit_images) do if img then Image.destroy(img) end end
     Image.destroy(utils.background_img)
+    Image.destroy(utils.background_img_bonus)
     Image.destroy(utils.background_img_lower)
     collectgarbage("collect")
     
@@ -56,6 +57,7 @@ end
 
 
 local function run_game()
+    -- Setting the random seed only works on the actual game console. Emulators often have a fixed os.time() that is set on startup
     math.randomseed(os.time()) for _ = 1, 5 do math.random() end
     utils.load_assets()
     init_reels()

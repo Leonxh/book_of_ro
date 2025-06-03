@@ -18,14 +18,6 @@ local function start_splash()
     while true do
         Controls.read()
 
-        if Keys.newPress.Down then
-            selected = selected + 1
-            if selected > total_items then selected = 1 end
-        elseif Keys.newPress.Up then
-            selected = selected - 1
-            if selected < 1 then selected = total_items end
-        end
-
         if Keys.newPress.A then
             Image.destroy(upper_image)
             Image.destroy(lower_image)

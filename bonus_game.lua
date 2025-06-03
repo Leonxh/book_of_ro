@@ -138,7 +138,7 @@ local function run_bonus_game(new_utils)
         -- Wait for user input to continue spin
         while true do
             utils.handle_input()
-            if utils.auto_spin or Keys.newPress.A or utils.quitting then
+            if utils.auto_spin or Keys.newPress.A or Stylus.newPress or utils.quitting then
                 break
             end
         end

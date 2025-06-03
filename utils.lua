@@ -132,7 +132,7 @@ function utils.draw_game_ui()
 
     -- === Controls ===
     screen.drawFillRect(SCREEN_DOWN, 0, 180, 256, 192, Color.new256(0, 0, 0))
-    screen.print(SCREEN_DOWN, 40, 182, "A: Spin | B: Auto | START: Quit", Color.new256(200, 200, 200))
+    screen.print(SCREEN_DOWN, 25, 182, "Tap/A: Spin | B: Auto | START: Quit", Color.new256(200, 200, 200))
 
     -- We also need to check user input here (yes, it's kinda ugly)
     utils.handle_input()

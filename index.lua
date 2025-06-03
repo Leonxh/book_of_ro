@@ -18,7 +18,7 @@ local function start_splash()
     while true do
         Controls.read()
 
-        if Keys.newPress.A then
+        if Keys.newPress.A or Stylus.held then
             Image.destroy(upper_image)
             Image.destroy(lower_image)
 
@@ -39,7 +39,7 @@ local function start_splash()
         screen.blit(SCREEN_DOWN, 0, 0, lower_image)
 
         screen.drawFillRect(SCREEN_DOWN, 0, 180, 256, 192, Color.new256(0, 0, 0))
-        screen.print(SCREEN_DOWN, 65, 182, "A: Begin | START: Quit", Color.new256(200, 200, 200))
+        screen.print(SCREEN_DOWN, 50, 182, "Tap/A: Begin | START: Quit", Color.new256(200, 200, 200))
 
         render()
     end

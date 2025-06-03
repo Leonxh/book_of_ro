@@ -1,4 +1,4 @@
-# 🌟 DSi Slot Machine – BOOK OF RO
+# 🌟 Nintendo DS: Slot Machine – BOOK OF RO
 
 A fully functional **slot machine** game made for the **Nintendo DS** using MicroLua DS. Spin the reels, trigger bonus rounds, and chase massive wins with expanding bonus symbols and fun animations including sounds.
 
@@ -149,8 +149,8 @@ This game is built using [MicroLua DS](https://sourceforge.net/projects/microlua
 
 ## ⚠️ Disclaimer
 
-This project is a **joke game** made for fun and experimentation — don't take it too seriously! 🎰🧪
-
-While the gameplay mechanics are inspired by slot machines and there's effort put into polish, you might still encounter **bugs or janky behavior** here and there. It's a **work in progress**, and development is ongoing. 🐛🚧
+This project is a fan-made **joke game** made for fun and experimentation. Created purely for educational and non-commercial purposes — don't take it too seriously! 🎰🧪
+It is not affiliated with, endorsed by, or connected to Novomatic or any rights holders of the original game.
+While there's effort put into polish, you might still encounter **bugs or janky behavior** here and there. It's a **work in progress**, and development is ongoing. 🐛🚧
 
 Thanks for understanding, and feel free to report any issues — or even better, contribute fixes!

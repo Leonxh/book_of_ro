@@ -1,9 +1,10 @@
-# 🌟 DSi Slot Machine – BOOK OF RO
+# 🌟 Nintendo DS: Slot Machine – BOOK OF RO
 
-A fully functional **slot machine** game made for the **Nintendo DS** using MicroLua DS. Spin the reels, trigger bonus rounds, and chase massive wins with expanding bonus symbols and fun animations with sounds.
+A fully functional **slot machine** game made for the **Nintendo DS** using MicroLua DS. Spin the reels, trigger bonus rounds, and chase massive wins with expanding bonus symbols and fun animations including sounds.
 
 <p align="center">
   <img src="assets/sprites/Cover.png" width="600"/>
+  <img src="assets/sprites/Cover_lower.png" width="600"/>
 </p>
 
 ---
@@ -19,11 +20,11 @@ A fully functional **slot machine** game made for the **Nintendo DS** using Micr
 
 ## 🕹 Controls
 
-| Button | Action                    |
-|--------|---------------------------|
-| `A`    | Spin the reels            |
-| `B`    | Toggle Auto Spin mode     |
-| `START`| Exit the game             |
+| Button             | Action                    |
+|--------------------|---------------------------|
+| `Stylo tap`/`A`    | Spin the reels            |
+| `B`                | Toggle Auto Spin mode     |
+| `START`            | Exit the game             |
 
 Bonus scenes are triggered and handled automatically and cannot be forced.
 
@@ -31,10 +32,10 @@ Bonus scenes are triggered and handled automatically and cannot be forced.
 
 ## 💥 Features
 
-- Smooth reel animations with scroll offset
+- Smooth reel animations
 - Highlighted winning paylines
-- Expanding symbols with visual feedback (WIP)
-- Bonus symbol picker with suspense animation (WIP)
+- Expanding symbols with visual feedback
+- Bonus symbol picker with suspense animation
 - Retriggerable bonus spins when landing 3+ Books during bonus rounds
 - Score tracking for each spin and total session
 
@@ -111,7 +112,7 @@ This slot machine game includes a variety of iconic symbols and animated hit eff
 
 
 ### 💥 Hit Effect Animations
-Each payline that was hit is marked with a unique overlay from 1 to 10:
+Each payline that was hit is marked with a unique overlay from 1 to 10. Only the symbols that actually score will be hightlighted like this.
 
 <p align="center"> 
 <img src="assets/symbols/crosses/1.png" width="50"  title="Line 1"/> 
@@ -142,15 +143,14 @@ This game is built using [MicroLua DS](https://sourceforge.net/projects/microlua
 
 1. Clone or download this repository to your computer.
 2. Copy the game folder to your flashcart or launch it through your emulator with MicroLua DS.
-3. Press `A` to spin, `B` to toggle auto-spin, and `START` to exit.
-4. **Literally profit**
+3. **Literally profit**
 
 ---
 
 ## ⚠️ Disclaimer
 
-This project is a **joke game** made for fun and experimentation — don't take it too seriously! 🎰🧪
-
-While the gameplay mechanics are inspired by slot machines and there's effort put into polish, you might still encounter **bugs or janky behavior** here and there. It's a **work in progress**, and development is ongoing. 🐛🚧
+This project is a fan-made **joke game** made for fun and experimentation. Created purely for educational and non-commercial purposes — don't take it too seriously! 🎰🧪
+It is not affiliated with, endorsed by, or connected to Novomatic or any rights holders of the original game.
+While there's effort put into polish, you might still encounter **bugs or janky behavior** here and there. It's a **work in progress**, and development is ongoing. 🐛🚧
 
 Thanks for understanding, and feel free to report any issues — or even better, contribute fixes!

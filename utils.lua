@@ -58,6 +58,8 @@ function utils.load_assets()
     for i=1,10 do
         utils.hit_images[i] = Image.load("assets/symbols/crosses/"..i..".png", RAM)
     end    
+
+    utils.font_game = Font.load("assets/fonts/gamefont.bin")
 end
 
 function utils.evaluate_bonus()
@@ -113,12 +115,12 @@ function utils.draw_game_ui()
 
     -- === Game Stats ===
     local text_color = Color.new256(0, 0, 0)
-    screen.print(SCREEN_DOWN, 170, 65, "" .. utils.current_score, text_color)
-    screen.print(SCREEN_DOWN, 170, 85, "" .. utils.total_score, text_color)
-    screen.print(SCREEN_DOWN, 170, 105, "" .. utils.spins_done, text_color)
+    screen.printFont(SCREEN_DOWN, 170, 63, "" .. utils.current_score, text_color, utils.font_game)
+    screen.printFont(SCREEN_DOWN, 170, 83, "" .. utils.total_score, text_color, utils.font_game)
+    screen.printFont(SCREEN_DOWN, 170, 103, "" .. utils.spins_done, text_color, utils.font_game)
 
     local average_score = utils.spins_done > 0 and math.floor(utils.total_score / utils.spins_done) or 0
-    screen.print(SCREEN_DOWN, 170, 125, "" .. average_score, text_color)
+    screen.printFont(SCREEN_DOWN, 170, 123, "" .. average_score, text_color, utils.font_game)
 
     -- === Bonus Symbol (in this case just an X) ===
     if utils.bonus_active and utils.bonus_symbol ~= nil then

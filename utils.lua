@@ -24,7 +24,7 @@ utils.symbol_values = {
     Ten={0,5,25,100}, J={0,5,25,100}, Q={0,5,25,100}, K={0,5,40,150}, A={0,5,40,150},
     Scarab={5,30,100,750}, Sungod={5,30,100,750}, Explorer={10,100,1000,5000}, Book={0,20,200,250}
 }
-utils.symbol_chances = { Ten=15, J=15, Q=15, K=12, A=12, Scarab=10, Sungod=8, Explorer=5, Book=3 }
+utils.symbol_chances = { Ten=15, J=15, Q=15, K=12, A=12, Scarab=10, Sungod=8, Explorer=5, Book=30 }
 
 function utils.create_weighted_symbols()
     utils.weighted_symbols = {}
@@ -124,7 +124,7 @@ function utils.draw_game_ui()
 
     -- === Bonus Symbol (in this case just an X) ===
     if utils.bonus_active and utils.bonus_symbol ~= nil then
-        screen.print(SCREEN_DOWN, 80, 48, "BONUS SPINS: " .. utils.remaining_bonus_spins, text_color)
+        screen.printFont(SCREEN_DOWN, 65, 40, "BONUS SPINS: " .. utils.remaining_bonus_spins, text_color, utils.font_game)
         screen.blit(SCREEN_DOWN, 170, 140, utils.symbol_images[utils.bonus_symbol])
     else
         -- Draw Placeholder symbol

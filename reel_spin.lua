@@ -28,7 +28,7 @@ local function start_bonus_rounds()
             end
         end
         if frame % 5 ~= 0 then
-            screen.print(SCREEN_DOWN, 95, 45, "!!!BONUS!!!", Color.new256(150, 0, 0))
+            screen.printFont(SCREEN_DOWN, 85, 40, "!!!BONUS!!!", Color.new256(150, 0, 0), utils.font_game)
         end
         render()
     end

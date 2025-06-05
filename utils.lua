@@ -124,7 +124,7 @@ function utils.draw_game_ui()
 
     -- === Bonus Symbol (in this case just an X) ===
     if utils.bonus_active and utils.bonus_symbol ~= nil then
-        screen.print(SCREEN_DOWN, 80, 48, "BONUS SPINS: " .. utils.remaining_bonus_spins, text_color)
+        screen.printFont(SCREEN_DOWN, 65, 40, "BONUS SPINS: " .. utils.remaining_bonus_spins, text_color, utils.font_game)
         screen.blit(SCREEN_DOWN, 170, 140, utils.symbol_images[utils.bonus_symbol])
     else
         -- Draw Placeholder symbol
